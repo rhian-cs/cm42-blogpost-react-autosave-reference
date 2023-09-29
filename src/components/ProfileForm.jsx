@@ -1,10 +1,39 @@
+import { useEffect, useState } from "react";
+import { getProfile, updateProfile } from "../apiClient";
+
+const EMPTY_PROFILE = {
+  name: "",
+  gender: "other",
+  description: "",
+};
+
 export const ProfileForm = () => {
+  const [profile, setProfile] = useState({ ...EMPTY_PROFILE });
+
+  const handleAttributeChange = (attribute, value) => {
+    const newProfile = { ...profile, [attribute]: value };
+
+    setProfile(newProfile);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    await updateProfile(profile);
+  };
+
+  useEffect(() => {
+    getProfile().then((fetchedProfile) => {
+      setProfile(fetchedProfile);
+    });
+  }, []);
+
   return (
     <div className="card">
       <div className="card-content">
         <h1 className="title has-text-centered">Profile Form</h1>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="columns">
             <div className="column">
               <div className="field">
@@ -17,6 +46,10 @@ export const ProfileForm = () => {
                     type="text"
                     name="profileName"
                     id="profileName"
+                    value={profile.name}
+                    onChange={(e) => {
+                      handleAttributeChange("name", e.target.value);
+                    }}
                   />
                 </div>
               </div>
@@ -29,7 +62,14 @@ export const ProfileForm = () => {
                 </label>
                 <div className="control">
                   <div className="select">
-                    <select name="profileGender" id="profileGender">
+                    <select
+                      name="profileGender"
+                      id="profileGender"
+                      value={profile.gender}
+                      onChange={(e) => {
+                        handleAttributeChange("gender", e.target.value);
+                      }}
+                    >
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                       <option value="other">Other</option>
@@ -49,6 +89,10 @@ export const ProfileForm = () => {
                 className="textarea"
                 name="profileDescription"
                 id="profileDescription"
+                value={profile.description}
+                onChange={(e) => {
+                  handleAttributeChange("description", e.target.value);
+                }}
               />
             </div>
           </div>
