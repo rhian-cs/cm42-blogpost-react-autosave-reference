@@ -1,7 +1,11 @@
+import "./bulma-overrides.css";
+
+import { ProfileForm } from "./components/ProfileForm";
+
 function App() {
   return (
     <div className="container mt-5">
-      <h1>Hello, world!</h1>
+      <ProfileForm />
     </div>
   );
 }
