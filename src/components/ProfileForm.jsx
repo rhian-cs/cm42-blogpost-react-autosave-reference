@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getProfile, updateProfile } from "../apiClient";
 import { useAutoSave } from "../hooks/useAutoSave";
+import { SaveStatus } from "./SaveStatus";
 
 const EMPTY_PROFILE = {
   name: "",
@@ -10,9 +11,16 @@ const EMPTY_PROFILE = {
 
 export const ProfileForm = () => {
   const [profile, setProfile] = useState({ ...EMPTY_PROFILE });
+  const [lastSavedAt, setLastSavedAt] = useState(null);
+
+  const onSave = async (profile) => {
+    const { data } = await updateProfile(profile);
+
+    setLastSavedAt(data.updatedAt);
+  };
 
   const { dispatchAutoSave, triggerManualSave } = useAutoSave({
-    onSave: updateProfile,
+    onSave: onSave,
   });
 
   const handleAttributeChange = (attribute, value) => {
@@ -32,6 +40,7 @@ export const ProfileForm = () => {
   useEffect(() => {
     getProfile().then((fetchedProfile) => {
       setProfile(fetchedProfile);
+      setLastSavedAt(fetchedProfile.updatedAt);
     });
   }, []);
 
@@ -104,11 +113,18 @@ export const ProfileForm = () => {
             </div>
           </div>
 
-          <input
-            type="submit"
-            value="Save Profile"
-            className="button is-link"
-          />
+          <div className="columns is-vcentered">
+            <div className="column is-narrow">
+              <input
+                type="submit"
+                value="Save Profile"
+                className="button is-link"
+              />
+            </div>
+            <div className="column is-narrow">
+              <SaveStatus savedAt={lastSavedAt} />
+            </div>
+          </div>
         </form>
       </div>
     </div>
