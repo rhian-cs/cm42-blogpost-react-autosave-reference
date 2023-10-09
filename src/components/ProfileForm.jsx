@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getProfile, updateProfile } from "../apiClient";
+import { useAutoSave } from "../hooks/useAutoSave";
 
 const EMPTY_PROFILE = {
   name: "",
@@ -10,16 +11,22 @@ const EMPTY_PROFILE = {
 export const ProfileForm = () => {
   const [profile, setProfile] = useState({ ...EMPTY_PROFILE });
 
+  const { dispatchAutoSave, triggerManualSave } = useAutoSave({
+    onSave: updateProfile,
+  });
+
   const handleAttributeChange = (attribute, value) => {
     const newProfile = { ...profile, [attribute]: value };
+
+    dispatchAutoSave(newProfile);
 
     setProfile(newProfile);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    await updateProfile(profile);
+    triggerManualSave(profile);
   };
 
   useEffect(() => {
