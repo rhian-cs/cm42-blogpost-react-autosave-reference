@@ -1,8 +1,29 @@
-# React + Vite
+# How to Design Simple Yet Effective Auto-Saving Forms - Reference Implementation
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project showcases how to make an auto-saving form using React.
 
-Currently, two official plugins are available:
+It is part of my blogpost at the Codeminer42 Blog.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Installation
+
+This app requires `node` and `npm` to be installed.
+
+Install dependencies:
+
+```sh
+npm install
+```
+
+Run the API in one terminal:
+
+```sh
+npm run api
+```
+
+Run the app in another terminal:
+
+```sh
+npm run dev
+```
+
+Open the app at http://localhost:5173.
