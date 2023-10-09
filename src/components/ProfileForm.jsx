@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getProfile, updateProfile } from "../apiClient";
 import { useAutoSave } from "../hooks/useAutoSave";
 import { SaveStatus } from "./SaveStatus";
+import { Spinner } from "./Spinner";
 
 const EMPTY_PROFILE = {
   name: "",
@@ -12,6 +13,7 @@ const EMPTY_PROFILE = {
 export const ProfileForm = () => {
   const [profile, setProfile] = useState({ ...EMPTY_PROFILE });
   const [lastSavedAt, setLastSavedAt] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const onSave = async (profile) => {
     const { data } = await updateProfile(profile);
@@ -45,8 +47,23 @@ export const ProfileForm = () => {
     getProfile().then((fetchedProfile) => {
       setProfile(fetchedProfile);
       setLastSavedAt(fetchedProfile.updatedAt);
+      setIsLoaded(true);
     });
   }, []);
+
+  if (!isLoaded) {
+    return (
+      <div className="card">
+        <div className="card-content">
+          <div className="columns is-centered is-vcentered">
+            <div className="column is-narrow my-5">
+              <Spinner />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="card">
