@@ -34,8 +34,12 @@ const formatLastSavedAt = (savedAt) => {
   });
 };
 
-const SaveStatus = ({ savedAt }) => {
-  if (!savedAt) {
+const SaveStatus = ({ savedAt, isPendingSave, isSaving }) => {
+  if (isSaving) {
+    return <StatusIcon icon={FaExclamationCircle}>Saving...</StatusIcon>;
+  }
+
+  if (!savedAt || isPendingSave) {
     return <StatusIcon icon={FaExclamationCircle}>Not saved yet.</StatusIcon>;
   }
 

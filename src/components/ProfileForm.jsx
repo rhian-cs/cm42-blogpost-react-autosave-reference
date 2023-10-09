@@ -19,9 +19,8 @@ export const ProfileForm = () => {
     setLastSavedAt(data.updatedAt);
   };
 
-  const { dispatchAutoSave, triggerManualSave } = useAutoSave({
-    onSave: onSave,
-  });
+  const { dispatchAutoSave, triggerManualSave, isPendingSave, isSaving } =
+    useAutoSave({ onSave });
 
   const handleAttributeChange = (attribute, value) => {
     const newProfile = { ...profile, [attribute]: value };
@@ -122,7 +121,11 @@ export const ProfileForm = () => {
               />
             </div>
             <div className="column is-narrow">
-              <SaveStatus savedAt={lastSavedAt} />
+              <SaveStatus
+                savedAt={lastSavedAt}
+                isPendingSave={isPendingSave}
+                isSaving={isSaving}
+              />{" "}
             </div>
           </div>
         </form>

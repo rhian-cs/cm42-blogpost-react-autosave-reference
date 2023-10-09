@@ -4,19 +4,35 @@ const AUTOSAVE_DEBOUNCE_TIME = 2000;
 
 export const useAutoSave = ({ onSave }) => {
   const [autoSaveTimer, setAutoSaveTimer] = useState(null);
+  const [isPendingSave, setIsPendingSave] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const dispatchAutoSave = (formData) => {
     clearTimeout(autoSaveTimer);
 
-    const timer = setTimeout(() => onSave(formData), AUTOSAVE_DEBOUNCE_TIME);
+    setIsPendingSave(true);
+
+    const timer = setTimeout(
+      () => triggerSave(formData),
+      AUTOSAVE_DEBOUNCE_TIME
+    );
 
     setAutoSaveTimer(timer);
   };
 
-  const triggerManualSave = (formData) => {
+  const triggerManualSave = async (formData) => {
     clearTimeout(autoSaveTimer);
-    onSave(formData);
+    setIsPendingSave(true);
+    await triggerSave(formData);
   };
 
-  return { dispatchAutoSave, triggerManualSave };
+  const triggerSave = async (formData) => {
+    setIsSaving(true);
+    await onSave(formData);
+    setIsSaving(false);
+
+    setIsPendingSave(false);
+  };
+
+  return { dispatchAutoSave, triggerManualSave, isPendingSave, isSaving };
 };
