@@ -1,4 +1,8 @@
-import { FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
+import {
+  FaExclamationCircle,
+  FaCheckCircle,
+  FaTimesCircle,
+} from "react-icons/fa";
 import { formatDistance } from "date-fns";
 import { useEffect, useState } from "react";
 
@@ -34,7 +38,11 @@ const formatLastSavedAt = (savedAt) => {
   });
 };
 
-const SaveStatus = ({ savedAt, isPendingSave, isSaving }) => {
+const SaveStatus = ({ savedAt, isPendingSave, isSaving, isError }) => {
+  if (isError) {
+    return <StatusIcon icon={FaTimesCircle}>Save Error!</StatusIcon>;
+  }
+
   if (isSaving) {
     return <StatusIcon icon={FaExclamationCircle}>Saving...</StatusIcon>;
   }
